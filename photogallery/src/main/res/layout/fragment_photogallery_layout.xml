@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp"
+        android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#f0111111"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_height="48dp">
+        <TextView
+            android:id="@+id/open_gallery"
+            android:clickable="true"
+            android:text="最近"
+            android:paddingLeft="22dp"
+            android:minWidth="120dp"
+            android:textColor="#ffffff"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+</FrameLayout>

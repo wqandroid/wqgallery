@@ -1,0 +1,18 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <item android:id="@+id/menu_photo_delete"
+        android:title=""
+        android:icon="@drawable/menu_delete"
+        app:showAsAction="always" />
+
+    <item android:id="@+id/menu_photo_count"
+        android:title=""
+        app:showAsAction="always" />
+
+
+
+
+</menu>

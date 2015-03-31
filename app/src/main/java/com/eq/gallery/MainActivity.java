@@ -23,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 
     LinearLayout llcontent;
     int scw,sch;
+    public  static  final int REQUEST_IMAGE=1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, MediaChoseActivity.class);
                 intent.putExtra("chose_mode",0);
-                startActivityForResult(intent, 1000);
+                startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
     }
@@ -49,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
         Intent intent=new Intent(this, MediaChoseActivity.class);
         intent.putExtra("chose_mode",1);
         intent.putExtra("max_chose_count",6);
-        startActivityForResult(intent, 1000);
+        startActivityForResult(intent, REQUEST_IMAGE);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -4,7 +4,7 @@
 
 
 
-![github](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-29.png "github")
+![github](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/wqgallert.jif "github")
 
 
 ##怎么使用?

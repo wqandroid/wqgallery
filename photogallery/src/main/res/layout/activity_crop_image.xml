@@ -1,0 +1,25 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CropImageUI">
+
+    <com.wq.photo.widget.CropImageView
+        android:id="@+id/cropImg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/selector_button"
+        android:text="确定"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>

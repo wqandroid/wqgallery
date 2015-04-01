@@ -73,11 +73,8 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         return false;
     }
 
-
-
-
-
     ListPopupWindow popupWindow;
+    FloderAdapter floderAdapter;
     private void initFloderPop() {
         popupWindow = new ListPopupWindow(getActivity());
         ImageFloder allimgslist=new ImageFloder();
@@ -85,7 +82,8 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         allimgslist.setCount(imageses.size());
         allimgslist.setFirstImagePath(imageses.get(1));
         mImageFloders.add(0,allimgslist);
-        popupWindow.setAdapter(new FloderAdapter(mImageFloders, getActivity()));
+        floderAdapter=new FloderAdapter(mImageFloders, getActivity());
+        popupWindow.setAdapter(floderAdapter);
         int sWidthPix = getResources().getDisplayMetrics().widthPixels;
         popupWindow.setContentWidth(sWidthPix);
         popupWindow.setHeight(sWidthPix + 100);
@@ -95,7 +93,8 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                ImageFloder floder = (ImageFloder) parent.getAdapter().getItem(position);
-               if(floder.getName().equals("/最近一周")){
+                floderAdapter.setCheck(position);
+                if(floder.getName().equals("/最近一周")){
                    currentimageses.clear();
                    currentimageses.addAll(imageses);
                    adapter = new PhotoAdapter(getActivity(), currentimageses, chose_mode);

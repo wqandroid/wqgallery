@@ -25,7 +25,11 @@ public class FloderAdapter extends BaseAdapter {
         this.floders=floders;
         inflater=LayoutInflater.from(context);
     }
-
+    int ckpos=0;
+    public void setCheck(int pos){
+        ckpos=pos;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {
@@ -60,14 +64,20 @@ public class FloderAdapter extends BaseAdapter {
         displayImage(floder.getFirstImagePath(),holderFoler.iv_floderimage);
         holderFoler.tv_flodername.setText(floder.getName());
         holderFoler.tv_flodercount.setText(floder.getCount()+"");
+        if(position==ckpos){
+            holderFoler.is_checked.setVisibility(View.VISIBLE);
+        }else {
+            holderFoler.is_checked.setVisibility(View.INVISIBLE);
+        }
         return convertView;
     }
 
     public static  class  ViewHolderFoler {
 
-        ImageView iv_floderimage;
+        ImageView iv_floderimage,is_checked;
         TextView tv_flodername,tv_flodercount;
         public ViewHolderFoler(View convertView){
+            is_checked= (ImageView) convertView.findViewById(R.id.is_checked);
             iv_floderimage= (ImageView) convertView.findViewById(R.id.id_dir_item_image);
             tv_flodercount= (TextView) convertView.findViewById(R.id.id_dir_item_count);
             tv_flodername= (TextView) convertView.findViewById(R.id.id_dir_item_name);

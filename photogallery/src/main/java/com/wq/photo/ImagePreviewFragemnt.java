@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.wq.photo.mode.Images;
 
 import java.lang.reflect.Array;

@@ -32,12 +32,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static RecyclerView.LayoutParams params;
     LinkedHashMap hashmap;
     public int currentChoseMode;
-
+    int sWidthPix;
     public PhotoAdapter(Context context, List<String> imageses, int chosemode) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.imageses = imageses;
-        int sWidthPix = context.getResources().getDisplayMetrics().widthPixels;
+        sWidthPix = context.getResources().getDisplayMetrics().widthPixels;
         params = new RecyclerView.LayoutParams(sWidthPix / 3, sWidthPix / 3);
         int dp3 = dip2px(context, 2);
         params.setMargins(dp3, dp3, dp3, dp3);
@@ -78,7 +78,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setNeedCamera(boolean isNeedCamera) {
         this.isNeedCamera = isNeedCamera;
     }
-
 
     /**
      * DIP转换成PX
@@ -162,10 +161,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder1.camera_lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(getCHoseImages().size()<max_chose_count){
-                        ((MediaChoseActivity)context).sendStarCamera();
+                    if(currentChoseMode==CHOSE_MODE_MULTIPLE){
+                        if(getCHoseImages().size()<max_chose_count){
+                            ((MediaChoseActivity)context).sendStarCamera();
+                        }else{
+                            Toast.makeText(context, "你最多只能选择" + max_chose_count + "张照片", Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        Toast.makeText(context, "你最多只能选择" + max_chose_count + "张照片", Toast.LENGTH_SHORT).show();
+                        if(getCHoseImages().size()>0){
+                            getCHoseImages().clear();
+                        }
+                        ((MediaChoseActivity)context).sendStarCamera();
                     }
                 }
             });
@@ -185,7 +191,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      */
     public void displayImage(String url, ImageView view) {
         com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
-                .loadImage(url, view);
+                .loadImage(url, view,sWidthPix/3,sWidthPix/3);
     }
 
     public static int TYPE_IMAGE = 10;

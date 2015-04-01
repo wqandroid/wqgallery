@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_pressed="true">
+        <shape>
+
+            <!-- 填充 -->
+            <solid android:color="#05f5a5" />
+
+            <!-- 圆角 -->
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+
+    <item android:state_pressed="false">
+        <shape>
+
+            <!-- 填充 -->
+            <solid android:color="#00d98f" />
+
+            <!-- 圆角 -->
+            <corners android:radius="20dp" />
+
+        </shape>
+    </item>
+
+</selector>

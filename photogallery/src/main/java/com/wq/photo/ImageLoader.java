@@ -1,5 +1,6 @@
 package com.wq.photo;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
@@ -88,7 +89,7 @@ public class ImageLoader
 			{
 				if (mInstance == null)
 				{
-					mInstance = new ImageLoader(1, Type.LIFO);
+					mInstance = new ImageLoader(3, Type.LIFO);
 				}
 			}
 		}
@@ -150,6 +151,63 @@ public class ImageLoader
 
 	}
 
+    public void loadImage(final String path,final ImageView imageView,final int w,final int h){
+
+        // set tag
+        imageView.setTag(path);
+        // UI线程
+        if (mHandler == null)
+        {
+            mHandler = new Handler()
+            {
+                @Override
+                public void handleMessage(Message msg)
+                {
+                    ImgBeanHolder holder = (ImgBeanHolder) msg.obj;
+                    ImageView imageView = holder.imageView;
+                    Bitmap bm = holder.bitmap;
+                    String path = holder.path;
+                    if (imageView.getTag().toString().equals(path))
+                    {
+                        imageView.setImageBitmap(bm);
+                    }
+                }
+            };
+        }
+
+        Bitmap bm = getBitmapFromLruCache(path);
+        if (bm != null)
+        {
+
+            imageView.setImageBitmap(bm);
+
+        } else
+        {
+            addTask(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    int reqWidth = w;
+                    int reqHeight = h;
+                    Bitmap bm = decodeSampledBitmapFromResource(path, reqWidth,
+                            reqHeight);
+                    addBitmapToLruCache(path, bm);
+                    ImgBeanHolder holder = new ImgBeanHolder();
+                    holder.imageView = imageView;
+                    holder.bitmap=bm;
+                    holder.path = path;
+                    Message message = Message.obtain();
+                    message.obj = holder;
+                    // Log.e("TAG", "mHandler.sendMessage(message);");
+                    mHandler.sendMessage(message);
+                    mPoolSemaphore.release();
+                }
+            });
+        }
+
+    }
+
 	/**
 	 * 加载图片
 	 * 
@@ -183,13 +241,6 @@ public class ImageLoader
 		Bitmap bm = getBitmapFromLruCache(path);
 		if (bm != null)
 		{
-//			ImgBeanHolder holder = new ImgBeanHolder();
-//			holder.bitmap = bm;
-//			holder.imageView = imageView;
-//			holder.path = path;
-//			Message message = Message.obtain();
-//			message.obj = holder;
-//			mHandler.sendMessage(message);
             imageView.setImageBitmap(bm);
 		} else
 		{
@@ -265,7 +316,7 @@ public class ImageLoader
 	 * 
 	 * @return
 	 */
-	public static ImageLoader getInstance(int threadCount, Type type)
+	public static ImageLoader getInstance(int threadCount,Type type)
 	{
 
 		if (mInstance == null)
@@ -402,7 +453,7 @@ public class ImageLoader
 		String path;
 	}
 
-	private class ImageSize
+	public class ImageSize
 	{
 		int width;
 		int height;

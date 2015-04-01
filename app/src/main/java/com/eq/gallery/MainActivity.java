@@ -45,6 +45,17 @@ public class MainActivity extends ActionBarActivity {
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
+
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this, MediaChoseActivity.class);
+                intent.putExtra("crop",true);
+                intent.putExtra("crop_image_w",720);
+                intent.putExtra("crop_image_h",720);
+                startActivityForResult(intent, REQUEST_IMAGE);
+            }
+        });
     }
     public void onclick(){
         Intent intent=new Intent(this, MediaChoseActivity.class);

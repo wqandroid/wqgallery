@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wq.photo" >
+    package="com.wq.photo"
+    android:versionCode="2"
+    android:versionName="1.0.1"
+    >
 
     <application
         android:allowBackup="true"
@@ -8,6 +11,10 @@
         <activity
             android:name=".MediaChoseActivity"
             android:label="@string/title_activity_media_chose" >
+        </activity>
+        <activity
+            android:name=".CropImageActivity"
+            android:label="@string/title_activity_crop_image" >
         </activity>
     </application>
 

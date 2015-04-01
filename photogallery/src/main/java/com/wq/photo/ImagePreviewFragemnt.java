@@ -57,14 +57,15 @@ public class ImagePreviewFragemnt extends Fragment {
             pos = getArguments().getInt("pos");
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_image_preview_fragemnt, container, false);
     }
-
     public void displayImage(String url, ImageView view) {
-        ImageLoader.getInstance().displayImage("file://" + url, view);
+        com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
+                .loadImage(url, view);
     }
     public String delete(){
         if(views.size()<=0){

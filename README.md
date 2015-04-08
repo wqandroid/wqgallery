@@ -2,11 +2,11 @@
 
 
 
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/wqgallert1.gif)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/blob/master/app/screenshort/wqgallert1.gif)
 
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-29.png)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-29.png)
 
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-34.png)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-34.png)
 ##怎么使用?
 
 下载工程及mode compile project(':photogallery')
@@ -33,15 +33,18 @@
     
 
 
-
+###github地址 https://github.com/wqandroid/wqgallery
 
 
 ###当前版本1.0.1
      下个版本能够在gradle引入photogallery库
       1.0.1 新增单选截图模式
+      
+     
 
 ##Developed By
 #####wqandroid@gmail.com
+####sinaweibo ios_android技术宅拯救世界
 ##License
 
     Copyright 2013 Andreas Stuetz

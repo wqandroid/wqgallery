@@ -1,6 +1,7 @@
 #android微信样式相册选择器
 
 
+####github地址 https://github.com/wqandroid/wqgallery
 
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/blob/master/app/screenshort/wqgallert1.gif)
 
@@ -33,7 +34,7 @@
     
 
 
-###github地址 https://github.com/wqandroid/wqgallery
+
 
 
 ###当前版本1.0.1

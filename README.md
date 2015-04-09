@@ -38,7 +38,11 @@
 
 ###当前版本1.0.1
      下个版本能够在gradle引入photogallery库
-      1.0.1 新增单选截图模式
+     1.0.1 新增单选截图模式
+
+
+###Change
+     修复修改剪裁尺寸失效的bug
 
 ##Developed By
 #####wqandroid@gmail.com

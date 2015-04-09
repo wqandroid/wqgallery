@@ -228,7 +228,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                 while (cursor.moveToNext()) {
                     String photopath = cursor.getString(dataColumnIndex);
                     long date=cursor.getLong(idIndex)*1000;
-                    long endtime=System.currentTimeMillis()-7*24*60*60*1000;
+                    long endtime=System.currentTimeMillis()-15*24*60*60*1000;
                     //获取最近7天的时间的照片
                     if(date>endtime){
                         if (photopath != null && new File(photopath).exists()) {
@@ -247,62 +247,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
             }
         }).start();
     }
-//    public void getthumbs() {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (Images images : imageses) {
-//                    setImagesThumb(images);
-//                }
-//            }
-//        }).start();
-//    }
-//    public void loadAllThumbsImages() {
-//        String orderBy = MediaStore.Images.Thumbnails.DEFAULT_SORT_ORDER;
-//        String[] columns = {MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID};
-//        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Images.
-//                Thumbnails.EXTERNAL_CONTENT_URI, columns, null, null, null);
-//        Images images;
-//        int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA);
-//        int idIndex = cursor.getColumnIndex(MediaStore.Images.Thumbnails.IMAGE_ID);
-//        while (cursor.moveToNext()) {
-//            images = new Images();
-//            images.ishaveorigin = false;
-//            images.photoThumbpath = cursor.getString(dataColumnIndex);
-//            images.imageid = cursor.getString(idIndex);
-//            if(images.photoThumbpath!=null&&new File(images.photoThumbpath).exists()){
-//                imageses.add(images);
-//            }
-//        }
-//        if (cursor != null) {
-//            cursor.close();
-//        }
-//    }
-//    public Images setImagesThumb(Images images) {
-//        if (images.imageid == null) {
-//            return images;
-//        }
-//        String[] projection = {MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA};
-//        Cursor cursor = getActivity().getContentResolver().query(
-//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,//指定缩略图数据库的Uri
-//                projection,//指定所要查询的字段
-//                MediaStore.Images.Media._ID + " = ?",//查询条件
-//                new String[]{images.imageid}, //查询条件中问号对应的值
-//                null);
-//        if (cursor != null && cursor.getCount() > 0) {
-//            cursor.moveToNext();
-//            images.photopath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Thumbnails.DATA));
-//            if (images.photopath != null && new File(images.photopath).exists()) {
-//                images.ishaveorigin = true;
-//            } else {
-//                imageses.remove(images);
-//            }
-//            cursor.close();
-//        }
-//        return images;
-//    }
-
-
     /**
      * 利用ContentProvider扫描手机中的图片，此方法在运行在子线程中 完成图片的扫描，最终获得jpg最多的那个文件夹
      */
@@ -329,8 +273,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                     // 获取图片的路径
                     String path = mCursor.getString(mCursor
                             .getColumnIndex(MediaStore.Images.Media.DATA));
-
-                    Log.e("TAG", path);
                     // 拿到第一张图片的路径
                     if (firstImage == null)
                         firstImage = path;

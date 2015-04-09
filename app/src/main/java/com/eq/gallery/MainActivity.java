@@ -51,8 +51,8 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, MediaChoseActivity.class);
                 intent.putExtra("crop",true);
-                intent.putExtra("crop_image_w",720);
-                intent.putExtra("crop_image_h",720);
+                intent.putExtra("crop_image_w",320);
+                intent.putExtra("crop_image_h",480);
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });

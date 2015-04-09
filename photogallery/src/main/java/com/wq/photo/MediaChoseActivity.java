@@ -258,6 +258,8 @@ public class MediaChoseActivity extends ActionBarActivity {
     public void sendStarCrop(String path) {
         Intent intent = new Intent(this, CropImageActivity.class);
         intent.setData(Uri.fromFile(new File(path)));
+        intent.putExtra("crop_image_w",crop_image_w);
+        intent.putExtra("crop_image_h",crop_image_h);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempFile().getAbsolutePath());
         startActivityForResult(intent, REQUEST_CODE_CROP);
     }

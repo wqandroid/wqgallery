@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.squareup.picasso.Picasso;
 import com.wq.photo.mode.Images;
 
 import java.lang.reflect.Array;
@@ -62,9 +63,12 @@ public class ImagePreviewFragemnt extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_image_preview_fragemnt, container, false);
     }
+
     public void displayImage(String url, ImageView view) {
-        com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
-                .loadImage(url, view);
+        Picasso.with(getActivity())
+                .load("file://" + url)
+                .placeholder(R.drawable.loadfaild)
+                .into(view);
     }
     public String delete(){
         if(views.size()<=0){

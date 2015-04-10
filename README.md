@@ -30,19 +30,20 @@
 ####在onActivityResult中获取选择的图片路径列表
 
     ArrayList<String>paths=data.getStringArrayListExtra("data");
-    
 
 
 
 
 
-###当前版本1.0.1
+###Version 1.0.1
      下个版本能够在gradle引入photogallery库
      1.0.1 新增单选截图模式
+     1.0.2 修改一些bug,以及样式
+           图片加载采用开源库Picasso
 
 
-###Change
-     修复修改剪裁尺寸失效的bug
+###Thanks
+* [square-picasso](https://github.com/square/picasso) A powerful image downloading and caching library for Android
 
 ##Developed By
 #####wqandroid@gmail.com

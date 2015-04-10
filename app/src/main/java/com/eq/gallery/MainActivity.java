@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import com.wq.photo.MediaChoseActivity;
 import com.wq.photo.PhotoGalleryFragment;
@@ -24,13 +26,15 @@ public class MainActivity extends ActionBarActivity {
     LinearLayout llcontent;
     int scw,sch;
     public  static  final int REQUEST_IMAGE=1000;
+    ListView listview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        scw=getResources().getDisplayMetrics().widthPixels-40;
-        llcontent= (LinearLayout) findViewById(R.id.llcontent);
-        sch=getResources().getDisplayMetrics().heightPixels-156;
+        listview= (ListView) findViewById(R.id.listview);
+//        scw=getResources().getDisplayMetrics().widthPixels-40;
+//        llcontent= (LinearLayout) findViewById(R.id.llcontent);
+//        sch=getResources().getDisplayMetrics().heightPixels-156;
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +73,9 @@ public class MainActivity extends ActionBarActivity {
         if(resultCode==RESULT_OK){
             //在data中返回 选择的图片列表
             ArrayList<String>paths=data.getStringArrayListExtra("data");
+            ArrayAdapter<String>adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,paths);
+            listview.setAdapter(adapter);
+            /*
             llcontent.removeAllViews();
            for (String path:paths){
                BitmapFactory.Options options=new BitmapFactory.Options();
@@ -95,7 +102,8 @@ public class MainActivity extends ActionBarActivity {
                Bitmap bitmap=BitmapFactory.decodeFile(path,options);
                imageView1.setImageBitmap(bitmap);
                llcontent.addView(imageView1);
-           }
+
+           }*/
         }
     }
 }

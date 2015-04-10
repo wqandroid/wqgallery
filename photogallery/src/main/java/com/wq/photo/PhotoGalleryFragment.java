@@ -61,8 +61,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
      * 扫描拿到所有的图片文件夹
      */
     private List<ImageFloder> mImageFloders = new ArrayList<ImageFloder>();
-
-
     @Override
     public boolean handleMessage(Message msg) {
         if (msg.what == 1) {
@@ -78,7 +76,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
     private void initFloderPop() {
         popupWindow = new ListPopupWindow(getActivity());
         ImageFloder allimgslist=new ImageFloder();
-        allimgslist.setDir("/最近一周");
+        allimgslist.setDir("/所有图片");
         allimgslist.setCount(imageses.size());
         allimgslist.setFirstImagePath(imageses.get(1));
         mImageFloders.add(0,allimgslist);
@@ -94,7 +92,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                ImageFloder floder = (ImageFloder) parent.getAdapter().getItem(position);
                 floderAdapter.setCheck(position);
-                if(floder.getName().equals("/最近一周")){
+                if(floder.getName().equals("/所有图片")){
                    currentimageses.clear();
                    currentimageses.addAll(imageses);
                    adapter = new PhotoAdapter(getActivity(), currentimageses, chose_mode);
@@ -103,7 +101,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                    adapter.setNeedCamera(true);
                    my_recycler_view.setAdapter(adapter);
                    popupWindow.dismiss();
-                   open_gallery.setText("最近一周");
+                   open_gallery.setText("所有图片");
                }else{
                    File mImgDir = new File(floder.getDir());
                    List<String> ims=
@@ -178,7 +176,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
         my_recycler_view.setLayoutManager(layoutManager);
         my_recycler_view.setAdapter(adapter);
-        open_gallery.setText("最近一周");
+        open_gallery.setText("所有图片");
         loadAllImages();
         return rootview;
     }
@@ -227,13 +225,13 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                 int idIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATE_MODIFIED);
                 while (cursor.moveToNext()) {
                     String photopath = cursor.getString(dataColumnIndex);
-                    long date=cursor.getLong(idIndex)*1000;
-                    long endtime=System.currentTimeMillis()-15*24*60*60*1000;
+//                    long date=cursor.getLong(idIndex)*1000;
+//                    long endtime=System.currentTimeMillis()-15*24*60*60*1000;
                     //获取最近7天的时间的照片
-                    if(date>endtime){
-                        if (photopath != null && new File(photopath).exists()) {
-                            imageses.add(photopath);
-                        }
+//                    if(date>endtime){
+//                    }
+                    if (photopath != null && new File(photopath).exists()) {
+                        imageses.add(photopath);
                     }
                 }
                 if (cursor != null) {

@@ -1,9 +1,13 @@
 #android微信样式相册选择器
 
 
+####github地址 https://github.com/wqandroid/wqgallery
 
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert1.gif)
+<<<<<<< HEAD
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/Screenshot_2015-03-31-18-35.png)
+=======
+>>>>>>> a3a4a824ba6a403453b9d1768cb738a497ddb8e2
 ##怎么使用?
 
 下载工程及mode compile project(':photogallery')
@@ -34,6 +38,7 @@
 
 ###Version 1.0.1
      下个版本能够在gradle引入photogallery库
+<<<<<<< HEAD
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
            图片加载采用开源库Picasso
@@ -41,9 +46,15 @@
 
 ###Thanks
 * [square-picasso](https://github.com/square/picasso) A powerful image downloading and caching library for Android
+=======
+      1.0.1 新增单选截图模式
+      
+     
+>>>>>>> a3a4a824ba6a403453b9d1768cb738a497ddb8e2
 
 ##Developed By
 #####wqandroid@gmail.com
+####sinaweibo ios_android技术宅拯救世界
 ##License
 
     Copyright 2013 Andreas Stuetz

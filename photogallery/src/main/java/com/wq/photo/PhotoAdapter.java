@@ -13,6 +13,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -39,7 +42,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.imageses = imageses;
         sWidthPix = context.getResources().getDisplayMetrics().widthPixels;
         params = new RecyclerView.LayoutParams(sWidthPix / 3, sWidthPix / 3);
-        int dp3 = dip2px(context, 2);
+        int dp3 = dip2px(context, 1);
         params.setMargins(dp3, dp3, dp3, dp3);
         currentChoseMode = chosemode;
         hashmap = ((MediaChoseActivity) context).getImageChoseMap();
@@ -190,8 +193,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * @param view
      */
     public void displayImage(String url, ImageView view) {
-        com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
-                .loadImage(url, view,sWidthPix/3,sWidthPix/3);
+//        com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
+//                .loadImage(url, view,sWidthPix/3,sWidthPix/3);
+        // 显示图片
+        Picasso.with(context)
+                .load("file://"+url)
+                .resize(sWidthPix/3,sWidthPix/3)
+                .placeholder(R.drawable.loadfaild)
+                        //.error(R.drawable.default_error)
+                .centerCrop()
+                .into(view);
     }
 
     public static int TYPE_IMAGE = 10;

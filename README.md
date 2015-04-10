@@ -2,11 +2,8 @@
 
 
 
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/wqgallert1.gif)
-
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-29.png)
-
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-34.png)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert1.gif)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/Screenshot_2015-03-31-18-35.png)
 ##怎么使用?
 
 下载工程及mode compile project(':photogallery')
@@ -30,15 +27,20 @@
 ####在onActivityResult中获取选择的图片路径列表
 
     ArrayList<String>paths=data.getStringArrayListExtra("data");
-    
 
 
 
 
 
-###当前版本1.0.1
+###Version 1.0.1
      下个版本能够在gradle引入photogallery库
-      1.0.1 新增单选截图模式
+     1.0.1 新增单选截图模式
+     1.0.2 修改一些bug,以及样式
+           图片加载采用开源库Picasso
+
+
+###Thanks
+* [square-picasso](https://github.com/square/picasso) A powerful image downloading and caching library for Android
 
 ##Developed By
 #####wqandroid@gmail.com

@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wq.photo.mode.ImageFloder;
 
 import java.util.ArrayList;
@@ -21,9 +22,13 @@ public class FloderAdapter extends BaseAdapter {
 
     List<ImageFloder> floders;
     LayoutInflater inflater;
+    Context context;
+    int imgsize=0;
     public FloderAdapter(List<ImageFloder>floders,Context context){
         this.floders=floders;
+        this.context=context;
         inflater=LayoutInflater.from(context);
+        imgsize=dip2px(context,96);
     }
     int ckpos=0;
     public void setCheck(int pos){
@@ -47,8 +52,23 @@ public class FloderAdapter extends BaseAdapter {
     }
 
     public void displayImage(String url, ImageView view) {
-        com.wq.photo.ImageLoader.getInstance(3, com.wq.photo.ImageLoader.Type.LIFO)
-                .loadImage(url,view);
+        Picasso.with(context)
+                .load("file://" + url)
+                .resize(imgsize, imgsize)
+                .placeholder(R.drawable.loadfaild)
+                .centerCrop()
+                .into(view);
+    }
+    /**
+     * DIP转换成PX
+     *
+     * @param context
+     * @param dipValue
+     * @return
+     */
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -62,7 +82,7 @@ public class FloderAdapter extends BaseAdapter {
         }
         ImageFloder floder=floders.get(position);
         displayImage(floder.getFirstImagePath(),holderFoler.iv_floderimage);
-        holderFoler.tv_flodername.setText(floder.getName());
+        holderFoler.tv_flodername.setText(floder.getName().substring(1));
         holderFoler.tv_flodercount.setText(floder.getCount()+"");
         if(position==ckpos){
             holderFoler.is_checked.setVisibility(View.VISIBLE);
@@ -73,7 +93,6 @@ public class FloderAdapter extends BaseAdapter {
     }
 
     public static  class  ViewHolderFoler {
-
         ImageView iv_floderimage,is_checked;
         TextView tv_flodername,tv_flodercount;
         public ViewHolderFoler(View convertView){

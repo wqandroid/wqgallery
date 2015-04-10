@@ -11,17 +11,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.wq.photo.mode.Images;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -58,6 +55,7 @@ public class MediaChoseActivity extends ActionBarActivity {
         if (chosemode == 1) {
             max_chose_count = getIntent().getIntExtra("max_chose_count", 9);
         }
+        //是否需要剪裁
         isneedCrop = getIntent().getBooleanExtra("crop", false);
         if (isneedCrop) {
             chosemode = CHOSE_MODE_SINGLE;
@@ -179,21 +177,15 @@ public class MediaChoseActivity extends ActionBarActivity {
             photoGalleryFragment.notifyDataSetChanged();
         }
     }
-
-
     boolean isCropOver = false;
-
     public void sendImages() {
         if (isneedCrop && !isCropOver) {
-            Intent intent = new Intent(this, CropImageActivity.class);
             Iterator iterator = imasgemap.keySet().iterator();
             File file = new File(iterator.next().toString());
             if (!file.exists()) {
                 Toast.makeText(this, "获取文件失败", Toast.LENGTH_SHORT).show();
             }
-            intent.setData(Uri.fromFile(file));
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempFile().getAbsolutePath());
-            startActivityForResult(intent, REQUEST_CODE_CROP);
+           sendStarCrop(file.getAbsolutePath());
         } else {
             Intent intent = new Intent();
             ArrayList<String> img = new ArrayList<>();
@@ -208,9 +200,6 @@ public class MediaChoseActivity extends ActionBarActivity {
         }
     }
 
-
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -219,14 +208,13 @@ public class MediaChoseActivity extends ActionBarActivity {
             ArrayList<String> img = new ArrayList<>();
             String crop_path=data.getStringExtra("crop_path");
             isCropOver=true;
-            Bitmap bitmap= BitmapFactory.decodeFile(crop_path);
-            if(bitmap==null){
-                Toast.makeText(this, "截取图片失败", Toast.LENGTH_SHORT).show();
-            }else{
+            if(crop_path!=null && new File(crop_path)!=null){
                 img.add(crop_path);
                 intent.putExtra("data", img);
                 setResult(RESULT_OK, intent);
                 finish();
+            }else{
+                Toast.makeText(this, "截取图片失败", Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_SINGLE)) {
             if(isneedCrop&&!isCropOver){
@@ -255,14 +243,23 @@ public class MediaChoseActivity extends ActionBarActivity {
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
+    File currentCrop;
     public void sendStarCrop(String path) {
         Intent intent = new Intent(this, CropImageActivity.class);
         intent.setData(Uri.fromFile(new File(path)));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempFile().getAbsolutePath());
+        intent.putExtra("crop_image_w", crop_image_w);
+        intent.putExtra("crop_image_h",crop_image_h);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,getCropFile().getAbsolutePath());
         startActivityForResult(intent, REQUEST_CODE_CROP);
     }
+
+
+
     public File getTempFile() {
         return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".tmp.jpg");
+    }
+    public File getCropFile() {
+        return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".crop.jpg");
     }
 
 }

@@ -32,15 +32,20 @@
 
 
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/ll">
-        <LinearLayout
-            android:id="@+id/llcontent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+    <ListView
+        android:id="@+id/listview"
+        android:layout_above="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+    <!--<HorizontalScrollView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_above="@+id/ll">-->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/llcontent"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="horizontal" />-->
+    <!--</HorizontalScrollView>-->
 
 </RelativeLayout>

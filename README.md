@@ -3,10 +3,7 @@
 
 
 ![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/wqgallert1.gif)
-
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-29.png)
-
-![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35-34.png)
+![Image text](https://github.com/wqandroid/wqgallery/blob/master/app/screenshort/Screenshot_2015-03-31-18-35.png)
 ##怎么使用?
 
 下载工程及mode compile project(':photogallery')

@@ -146,6 +146,23 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         fragment.setArguments(args);
         return fragment;
     }
+
+    /**
+     * 当拍照之后刷新出来拍照的那张照片
+     * @param path
+     */
+    public void addCaptureFile(final String path){
+        log(path);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                currentimageses.add(1, path);
+                imageses.add(1,path);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -3,6 +3,7 @@ package com.wq.photo;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -217,19 +221,54 @@ public class MediaChoseActivity extends ActionBarActivity {
                 Toast.makeText(this, "截取图片失败", Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_SINGLE)) {
-            if(isneedCrop&&!isCropOver){
-                sendStarCrop(currentfile.getAbsolutePath());
+            if(currentfile!=null&&currentfile.exists()&&currentfile.length()>10){
+                if(isneedCrop&&!isCropOver){
+                    sendStarCrop(currentfile.getAbsolutePath());
+                }else{
+                    Intent intent = new Intent();
+                    ArrayList<String> img = new ArrayList<>();
+                    img.add(currentfile.getAbsolutePath());
+                    intent.putExtra("data", img);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                insertImage(currentfile.getAbsolutePath());
             }else{
-                Intent intent = new Intent();
-                ArrayList<String> img = new ArrayList<>();
-                img.add(currentfile.getAbsolutePath());
-                intent.putExtra("data", img);
-                setResult(RESULT_OK, intent);
-                finish();
+                Toast.makeText(MediaChoseActivity.this,"获取图片失败",Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_MULTIPLE)) {
-            getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());
-            invalidateOptionsMenu();
+
+            if(currentfile!=null&&currentfile.exists()&&currentfile.length()>10){
+                getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());
+                invalidateOptionsMenu();
+                insertImage(currentfile.getAbsolutePath());
+            }else{
+                Toast.makeText(MediaChoseActivity.this,"获取图片失败",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public void insertImage(String fileName){
+        try {
+            MediaStore.Images.Media.insertImage(getContentResolver(),
+                    fileName, new File(fileName).getName(),
+                    new File(fileName).getName());
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.fromFile(new File(fileName));
+            intent.setData(uri);
+            sendBroadcast(intent);
+            MediaScannerConnection.scanFile(this, new String[]{fileName}, new String[]{"image/jpeg"}, new MediaScannerConnection.MediaScannerConnectionClient() {
+                @Override
+                public void onMediaScannerConnected() {
+                }
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    photoGalleryFragment.addCaptureFile(path);
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -243,7 +282,6 @@ public class MediaChoseActivity extends ActionBarActivity {
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
-    File currentCrop;
     public void sendStarCrop(String path) {
         Intent intent = new Intent(this, CropImageActivity.class);
         intent.setData(Uri.fromFile(new File(path)));
@@ -256,7 +294,12 @@ public class MediaChoseActivity extends ActionBarActivity {
 
 
     public File getTempFile() {
-        return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".tmp.jpg");
+        String str = null;
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        date = new Date(System.currentTimeMillis());
+        str = format.format(date);
+        return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "IMG_"+str+".jpg");
     }
     public File getCropFile() {
         return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".crop.jpg");

@@ -221,20 +221,22 @@ public class CropImageView extends View {
                         if(floatScopeFlag) {
                             int newLeft = mDrawableDst.left;
                             int newTop = mDrawableDst.top;
+			    int newBottom=mDrawableDst.bottom;
                             boolean isChange = false;
-                            if (newLeft < getWidth() - mDrawableDst.width()) {
-                                newLeft = getWidth() - mDrawableDst.width();
+                            if (newLeft < -(getWidth() - mDrawableFloat.width())/2) {
+                                newLeft =-(getWidth() - mDrawableFloat.width())/2;
                                 isChange = true;
-                            } else if (newLeft > 0) {
-                                newLeft = 0;
+                            } else if (newLeft > (getWidth() - mDrawableFloat.width())/2) {
+                                newLeft = (getWidth() - mDrawableFloat.width())/2;
                                 isChange = true;
                             }
 
                             if (newTop > mDrawableFloat.top) {
                                 newTop = mDrawableFloat.top;
                                 isChange = true;
-                            } else if (newTop < mDrawableFloat.top + getWidth() - mDrawableDst.height()) {
-                                newTop = mDrawableFloat.top + getWidth() - mDrawableDst.height();
+                            } else if (newBottom < mDrawableFloat.top +mDrawableFloat.height()) {
+								newBottom = mDrawableFloat.top +mDrawableFloat.height();
+								newTop+=newBottom-mDrawableDst.bottom;
                                 isChange = true;
                             }
                             if (isChange) {
@@ -342,23 +344,24 @@ public class CropImageView extends View {
         int newTop = mDrawableDst.top;
 
 		boolean isChange=false;
-        if(floatScopeFlag) {
-            if (newLeft < getWidth() - mDrawableDst.width()) {
-                newLeft = getWidth() - mDrawableDst.width();
-                isChange = true;
-            } else if (newLeft > 0) {
-                newLeft = 0;
-                isChange = true;
-            }
+         if(floatScopeFlag) {
+			if (newLeft < -(getWidth() - mDrawableFloat.width())/2) {
+				newLeft =-(getWidth() - mDrawableFloat.width())/2;
+				isChange = true;
+			}else if (newLeft > (getWidth() - mDrawableFloat.width())/2) {
+				newLeft = (getWidth() - mDrawableFloat.width())/2;
+				isChange = true;
+			}
 
             if (newTop > mDrawableFloat.top) {
                 newTop = mDrawableFloat.top;
                 isChange = true;
-            } else if (newTop < mDrawableFloat.top + getWidth() - mDrawableDst.height()) {
-                newTop = mDrawableFloat.top + getWidth() - mDrawableDst.height();
-                isChange = true;
-            }
-        } else {
+            }  else if (newBottom < mDrawableFloat.top +mDrawableFloat.height()) {
+				newBottom = mDrawableFloat.top +mDrawableFloat.height();
+				newTop+=newBottom-mDrawableDst.bottom;
+				isChange = true;
+			}
+        }else {
             if (mDrawableDst.left < -mDrawableDst.width()) {
                 newLeft = -mDrawableDst.width() + getWidth();
                 isChange = true;

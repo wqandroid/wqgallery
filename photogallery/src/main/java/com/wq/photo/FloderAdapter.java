@@ -8,10 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wq.photo.mode.ImageFloder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,12 +52,11 @@ public class FloderAdapter extends BaseAdapter {
     }
 
     public void displayImage(String url, ImageView view) {
-        Picasso.with(context)
-                .load("file://" + url)
-                .resize(imgsize, imgsize)
-                .placeholder(R.drawable.loadfaild)
-                .centerCrop()
+        Glide.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .override(imgsize,imgsize)
                 .into(view);
+
     }
     /**
      * DIP转换成PX

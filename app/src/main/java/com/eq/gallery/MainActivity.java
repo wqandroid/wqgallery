@@ -32,9 +32,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listview= (ListView) findViewById(R.id.listview);
-//        scw=getResources().getDisplayMetrics().widthPixels-40;
-//        llcontent= (LinearLayout) findViewById(R.id.llcontent);
-//        sch=getResources().getDisplayMetrics().heightPixels-156;
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this, MediaChoseActivity.class);
-                intent.putExtra("chose_mode",0);
+                intent.putExtra("chose_mode",MediaChoseActivity.CHOSE_MODE_SINGLE);
                 startActivityForResult(intent, REQUEST_IMAGE);
             }
         });
@@ -63,7 +60,7 @@ public class MainActivity extends ActionBarActivity {
     }
     public void onclick(){
         Intent intent=new Intent(this, MediaChoseActivity.class);
-        intent.putExtra("chose_mode",1);
+        intent.putExtra("chose_mode",MediaChoseActivity.CHOSE_MODE_MULTIPLE);
         intent.putExtra("max_chose_count",6);
         startActivityForResult(intent, REQUEST_IMAGE);
     }

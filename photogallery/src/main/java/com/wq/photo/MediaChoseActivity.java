@@ -1,9 +1,10 @@
 package com.wq.photo;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -43,6 +47,9 @@ public class MediaChoseActivity extends ActionBarActivity {
     int chosemode = CHOSE_MODE_MULTIPLE;
 
     boolean isneedCrop = false;
+    boolean isNeedActionbar = false;
+    boolean isNeedfcamera = false;
+
     int crop_image_w, crop_image_h;
 
     @Override
@@ -52,26 +59,37 @@ public class MediaChoseActivity extends ActionBarActivity {
         FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         chosemode = getIntent().getIntExtra("chose_mode", CHOSE_MODE_MULTIPLE);
-        if (chosemode == 1) {
+        if (chosemode == CHOSE_MODE_MULTIPLE) {
             max_chose_count = getIntent().getIntExtra("max_chose_count", 9);
         }
+        isNeedActionbar = getIntent().getBooleanExtra("isneedactionbar", true);
+        isNeedfcamera = getIntent().getBooleanExtra("isNeedfcamera", true);
         //是否需要剪裁
         isneedCrop = getIntent().getBooleanExtra("crop", false);
         if (isneedCrop) {
             chosemode = CHOSE_MODE_SINGLE;
-            max_chose_count=1;
+            max_chose_count = 1;
             crop_image_w = getIntent().getIntExtra("crop_image_w", 720);
             crop_image_h = getIntent().getIntExtra("crop_image_h", 720);
         }
-        photoGalleryFragment = PhotoGalleryFragment.newInstance(chosemode, max_chose_count);
+        photoGalleryFragment = PhotoGalleryFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isNeedfcamera", isNeedfcamera);
+        bundle.putInt("chose_mode", chosemode);
+        bundle.putInt("max_chose_count", max_chose_count);
+        photoGalleryFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, photoGalleryFragment, PhotoGalleryFragment.class.getSimpleName());
         fragmentTransaction.commit();
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
+
     boolean isPriview = false;
     public void starPriview(LinkedHashMap map, String currentimage) {
-        if(isneedCrop&&!isCropOver){
+        if (isneedCrop && !isCropOver) {
             sendStarCrop(currentimage);
-        }else{
+        } else {
             Set<String> keys = map.keySet();
             ArrayList<String> ims = new ArrayList<>();
             int pos = 0;
@@ -98,9 +116,13 @@ public class MediaChoseActivity extends ActionBarActivity {
         return getSupportFragmentManager().findFragmentByTag(tag);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
+        if (!isNeedActionbar) {
+            getSupportActionBar().hide();
+        }
     }
 
     public LinkedHashMap getImageChoseMap() {
@@ -133,7 +155,11 @@ public class MediaChoseActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            popFragment();
+            if (isPriview) {
+                popFragment();
+            } else {
+                finish();
+            }
         } else if (item.getItemId() == R.id.menu_photo_delete) {
             ImagePreviewFragemnt fragemnt = (ImagePreviewFragemnt) getCurrentFragment(ImagePreviewFragemnt.class.getSimpleName());
             if (fragemnt != null) {
@@ -177,7 +203,9 @@ public class MediaChoseActivity extends ActionBarActivity {
             photoGalleryFragment.notifyDataSetChanged();
         }
     }
+
     boolean isCropOver = false;
+
     public void sendImages() {
         if (isneedCrop && !isCropOver) {
             Iterator iterator = imasgemap.keySet().iterator();
@@ -185,7 +213,7 @@ public class MediaChoseActivity extends ActionBarActivity {
             if (!file.exists()) {
                 Toast.makeText(this, "获取文件失败", Toast.LENGTH_SHORT).show();
             }
-           sendStarCrop(file.getAbsolutePath());
+            sendStarCrop(file.getAbsolutePath());
         } else {
             Intent intent = new Intent();
             ArrayList<String> img = new ArrayList<>();
@@ -206,36 +234,73 @@ public class MediaChoseActivity extends ActionBarActivity {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CROP && (chosemode == CHOSE_MODE_SINGLE)) {
             Intent intent = new Intent();
             ArrayList<String> img = new ArrayList<>();
-            String crop_path=data.getStringExtra("crop_path");
-            isCropOver=true;
-            if(crop_path!=null && new File(crop_path)!=null){
+            String crop_path = data.getStringExtra("crop_path");
+            isCropOver = true;
+            if (crop_path != null && new File(crop_path) != null) {
                 img.add(crop_path);
                 intent.putExtra("data", img);
                 setResult(RESULT_OK, intent);
                 finish();
-            }else{
+            } else {
                 Toast.makeText(this, "截取图片失败", Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_SINGLE)) {
-            if(isneedCrop&&!isCropOver){
-                sendStarCrop(currentfile.getAbsolutePath());
-            }else{
-                Intent intent = new Intent();
-                ArrayList<String> img = new ArrayList<>();
-                img.add(currentfile.getAbsolutePath());
-                intent.putExtra("data", img);
-                setResult(RESULT_OK, intent);
-                finish();
+            if (currentfile != null && currentfile.exists() && currentfile.length() > 10) {
+                if (isneedCrop && !isCropOver) {
+                    sendStarCrop(currentfile.getAbsolutePath());
+                } else {
+                    Intent intent = new Intent();
+                    ArrayList<String> img = new ArrayList<>();
+                    img.add(currentfile.getAbsolutePath());
+                    intent.putExtra("data", img);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                insertImage(currentfile.getAbsolutePath());
+            } else {
+                Toast.makeText(MediaChoseActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
             }
         } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_MULTIPLE)) {
-            getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());
-            invalidateOptionsMenu();
+
+            if (currentfile != null && currentfile.exists() && currentfile.length() > 10) {
+                getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());
+                invalidateOptionsMenu();
+                insertImage(currentfile.getAbsolutePath());
+            } else {
+                Toast.makeText(MediaChoseActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public void insertImage(String fileName) {
+        try {
+            MediaStore.Images.Media.insertImage(getContentResolver(),
+                    fileName, new File(fileName).getName(),
+                    new File(fileName).getName());
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri = Uri.fromFile(new File(fileName));
+            intent.setData(uri);
+            sendBroadcast(intent);
+            MediaScannerConnection.scanFile(this, new String[]{fileName}, new String[]{"image/jpeg"}, new MediaScannerConnection.MediaScannerConnectionClient() {
+                @Override
+                public void onMediaScannerConnected() {
+                }
+
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    photoGalleryFragment.addCaptureFile(path);
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public static final int REQUEST_CODE_CAMERA = 2001;
     public static final int REQUEST_CODE_CROP = 2002;
     File currentfile;
+
     public void sendStarCamera() {
         currentfile = getTempFile();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -243,23 +308,41 @@ public class MediaChoseActivity extends ActionBarActivity {
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
-    File currentCrop;
     public void sendStarCrop(String path) {
         Intent intent = new Intent(this, CropImageActivity.class);
         intent.setData(Uri.fromFile(new File(path)));
         intent.putExtra("crop_image_w", crop_image_w);
-        intent.putExtra("crop_image_h",crop_image_h);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,getCropFile().getAbsolutePath());
+        intent.putExtra("crop_image_h", crop_image_h);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, getCropFile().getAbsolutePath());
         startActivityForResult(intent, REQUEST_CODE_CROP);
     }
-
-
-
     public File getTempFile() {
-        return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".tmp.jpg");
+        String str = null;
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+        date = new Date(System.currentTimeMillis());
+        str = format.format(date);
+        return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "IMG_" + str + ".jpg");
     }
     public File getCropFile() {
-        return  new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), ".crop.jpg");
+        return new File(getTmpPhotos());
     }
+    /**
+     * 获取tmp path
+     * @return
+     */
+    public  String getTmpPhotos() {
+        return new File(getCacheFile(), ".tmpcamara" + System.currentTimeMillis() + ".jpg").getAbsolutePath();
+    }
+    /**
+     * 临时缓存目录
+     * @return
+     */
+    public String getCacheFile() {
+        return  getDir("post_temp", Context.MODE_PRIVATE).getAbsolutePath();
+    }
+
+
+
 
 }

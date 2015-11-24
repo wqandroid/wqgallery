@@ -1,6 +1,5 @@
 package com.wq.photo;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,16 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import com.wq.photo.mode.Images;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,10 +57,8 @@ public class ImagePreviewFragemnt extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_image_preview_fragemnt, container, false);
     }
-
     public void displayImage(String url, ImageView view) {
-        Picasso.with(getActivity())
-                .load("file://" + url)
+        Glide.with(getActivity()).load(url)
                 .placeholder(R.drawable.loadfaild)
                 .into(view);
     }

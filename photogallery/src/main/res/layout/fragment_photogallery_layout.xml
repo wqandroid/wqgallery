@@ -26,11 +26,18 @@
             android:text="最近"
             android:paddingLeft="22dp"
             android:minWidth="120dp"
+            android:focusable="true"
             android:textColor="#ffffff"
             android:gravity="center_vertical"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent" />
-
+        <ImageView
+            android:id="@+id/clear"
+            android:src="@drawable/abc_ic_clear_mtrl_alpha"
+            android:layout_width="48dp"
+            android:scaleType="center"
+            android:layout_height="48dp" />
         </LinearLayout>
 
 </FrameLayout>

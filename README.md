@@ -33,14 +33,15 @@
 
 
 ###Version 1.0.1
-     下个版本能够在gradle引入photogallery库
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
            图片加载采用开源库Picasso
 
+     2.0.0 修改之前遗留的一些bug,加载图片换成了glide
+
 
 ###Thanks
-  * [square-picasso](https://github.com/square/picasso) A powerful image downloading and caching library for Android 
+  * [Glide](https://github.com/bumptech/glide) A powerful image downloading and caching library for Android
 
 ##Developed By
 #####wqandroid@gmail.com

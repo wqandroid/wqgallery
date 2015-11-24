@@ -1,6 +1,5 @@
 #android微信样式相册选择器
 
-
 ####github地址 https://github.com/wqandroid/wqgallery
 
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert1.gif)
@@ -35,8 +34,6 @@
 ###Version 1.0.1
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
-           图片加载采用开源库Picasso
-
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
 
 

@@ -1,16 +1,20 @@
-#android微信样式相册选择器
+#微信样式相册选择器
 =====
 
 ####下面是效果图
 
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert1.gif)
 
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/Screenshot_2015-03-31-18-35.png)
+
+
 
 
 [ ![Download](https://api.bintray.com/packages/wqandroid/maven/Photogallery/images/download.svg) ](https://bintray.com/wqandroid/maven/Photogallery/_latestVersion)
 
-=====
 ##怎么使用?
+
+====
 #####第一步 在项目的 build.gradle 添加dependencies
     
     dependencies {

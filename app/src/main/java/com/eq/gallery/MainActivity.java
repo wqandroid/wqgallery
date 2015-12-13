@@ -67,12 +67,14 @@ public class MainActivity extends AppCompatActivity {
                 .maxPickSize(9)
                 .isneedcamera(true)
                 .spanCount(4)
+                .isneedcrop(false)
+                .isneedactionbar(false)
                 .pickMode(PickConfig.MODE_MULTIP_PICK).build();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK){
+        if(resultCode==RESULT_OK && requestCode == PickConfig.PICK_REQUEST_CODE){
             //在data中返回 选择的图片列表
             ArrayList<String>paths=data.getStringArrayListExtra("data");
             ArrayAdapter<String>adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,android.R.id.text1,paths);

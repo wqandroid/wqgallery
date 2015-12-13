@@ -18,28 +18,29 @@
 #####第一步 在项目的 build.gradle 添加dependencies
     
     dependencies {
-       compile 'wq.photo:photogallery:2.0.0'
+       compile 'wq.photo:photogallery:2.1.0'
     }
 #####第二步 调用相册选择器
-    Intent intent=new Intent(MainActivity.this, MediaChoseActivity.class);
-    //chose_mode选择模式 0单选 1多选
-    intent.putExtra("chose_mode",0);
-    //最多支持选择多少张
-    intent.putExtra("max_chose_count",6);
-    //是否显示actionbar
-    intent.putExtra("isneedactionbar",false);
-    //是否显示需要第一个是图片相机按钮
-    intent.putExtra("isNeedfcamera",false);
-    //是否剪裁图片(只有单选模式才有剪裁)
-    intent.putExtra("crop",true);
-    startActivityForResult(intent, REQUEST_IMAGE);
+
+     new  PickConfig.Builder(MainActivity.this)
+                .maxPickSize(9)//最多选择几张
+                .isneedcamera(true)//是否需要第一项是相机
+                .spanCount(4)//一行显示几张照片
+                .isneedcrop(false)//受否需要剪裁
+                .isneedactionbar(false)//是否需要actionbar 多选默认不能隐藏
+                .pickMode(PickConfig.MODE_MULTIP_PICK)//单选还是多选
+                .build();
 
       
       
    
 #####第三步 在onActivityResult中获取选择的图片路径列表
 
-    ArrayList<String>paths=data.getStringArrayListExtra("data");
+     if(resultCode==RESULT_OK && requestCode == PickConfig.PICK_REQUEST_CODE){
+            //在data中返回 选择的图片列表
+            ArrayList<String>paths=data.getStringArrayListExtra("data");
+            
+        }
 
 
 
@@ -49,6 +50,7 @@
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
+     2.1.0 修改了配置选择的代码 支持自定义一行显示几张
 
 
 ###Thanks

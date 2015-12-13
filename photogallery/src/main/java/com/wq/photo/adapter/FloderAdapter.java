@@ -1,4 +1,4 @@
-package com.wq.photo;
+package com.wq.photo.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.wq.photo.R;
 import com.wq.photo.mode.ImageFloder;
 
 import java.util.List;

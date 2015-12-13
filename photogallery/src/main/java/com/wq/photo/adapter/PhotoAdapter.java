@@ -1,4 +1,4 @@
-package com.wq.photo;
+package com.wq.photo.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.wq.photo.MediaChoseActivity;
+import com.wq.photo.R;
+import com.wq.photo.widget.PickConfig;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,8 +25,6 @@ import java.util.List;
  */
 public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int CHOSE_MODE_SINGLE = 0;
-    public static final int CHOSE_MODE_MULTIPLE = 1;
 
     public int max_chose_count = 9;
 
@@ -34,18 +35,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     LinkedHashMap hashmap;
     public int currentChoseMode;
     int sWidthPix;
-    public PhotoAdapter(Context context, List<String> imageses, int chosemode) {
+    int spancount;
+    public PhotoAdapter(Context context, List<String> imageses, int spancount,int chosemode) {
         inflater = LayoutInflater.from(context);
         this.context = context;
+        this.spancount=spancount;
         this.imageses = imageses;
         sWidthPix = context.getResources().getDisplayMetrics().widthPixels;
-        params = new RecyclerView.LayoutParams(sWidthPix / 3, sWidthPix / 3);
-        int dp3 = dip2px(context, 1);
-        params.setMargins(dp3, dp3, dp3, dp3);
+        params = new RecyclerView.LayoutParams(sWidthPix / spancount, sWidthPix / spancount);
         currentChoseMode = chosemode;
         hashmap = ((MediaChoseActivity) context).getImageChoseMap();
     }
-
     public LinkedHashMap getCHoseImages() {
         return hashmap;
     }
@@ -53,9 +53,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setmax_chose_count(int max_chose_count) {
         this.max_chose_count = max_chose_count;
     }
-
     String imgdir;
-
     public void setDir(String dir) {
         imgdir = dir;
     }
@@ -109,7 +107,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             final ImageViewHolder ivholder = (ImageViewHolder) holder;
             final String images = getDir() + imageses.get(position);
             displayImage(images, ivholder.iv_image);
-            if (currentChoseMode == CHOSE_MODE_MULTIPLE) {
+            if (currentChoseMode == PickConfig.MODE_MULTIP_PICK) {
                 ivholder.checkBox.setVisibility(View.VISIBLE);
                 ivholder.checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -162,7 +160,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             holder1.camera_lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(currentChoseMode==CHOSE_MODE_MULTIPLE){
+                    if(currentChoseMode==PickConfig.MODE_MULTIP_PICK){
                         if(getCHoseImages().size()<max_chose_count){
                             ((MediaChoseActivity)context).sendStarCamera();
                         }else{
@@ -194,7 +192,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Glide.with(context).load(url).
                 centerCrop()
                 .crossFade()
-                .override(sWidthPix/3,sWidthPix/3)
+                .override(sWidthPix/spancount,sWidthPix/spancount)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .placeholder(R.drawable.loadfaild)
                 .into(view);
@@ -210,11 +208,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         return TYPE_IMAGE;
     }
-
     @Override
     public int getItemCount() {
-        if (imageses.size() == 0) {
-            return 1;
+        if (isNeedCamera){
+            return imageses.size()+1;
         }
         return imageses.size();
     }
@@ -232,6 +229,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             checkBox = (ImageButton) itemView.findViewById(R.id.checkimages);
         }
     }
+
     public static class CameraViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout camera_lin;
         public CameraViewHolder(View itemView) {

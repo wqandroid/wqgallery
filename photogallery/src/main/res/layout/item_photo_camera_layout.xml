@@ -2,14 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="1dp"
     android:orientation="vertical">
-
     <!--<com.wq.photo.widget.CameraPreview-->
         <!--android:id="@+id/camer_view"-->
         <!--android:visibility="gone"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent" />-->
-
     <LinearLayout
         android:id="@+id/camera_lin"
         android:layout_gravity="center"

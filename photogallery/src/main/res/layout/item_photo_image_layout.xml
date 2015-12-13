@@ -2,8 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="#404245"
+    android:padding="1dp"
     android:layout_height="match_parent">
-
     <ImageView
         android:id="@+id/iv_image"
         android:scaleType="centerCrop"
@@ -21,8 +21,6 @@
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></View>
-
-
     <ImageButton
         android:id="@+id/checkimages"
         android:layout_gravity="right"
@@ -32,6 +30,4 @@
         android:layout_width="36dp"
         android:scaleType="center"
         android:layout_height="36dp" />
-
-
 </FrameLayout>

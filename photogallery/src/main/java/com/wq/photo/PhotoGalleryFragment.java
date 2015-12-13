@@ -11,23 +11,22 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.text.ICUCompat;
-import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wq.photo.adapter.FloderAdapter;
+import com.wq.photo.adapter.PhotoAdapter;
 import com.wq.photo.mode.ImageFloder;
-import com.wq.photo.mode.Images;
+import com.wq.photo.widget.PickConfig;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -43,9 +42,8 @@ import java.util.List;
 public class PhotoGalleryFragment extends Fragment implements android.os.Handler.Callback {
 
 
-    public static final int CHOSE_MODE_SINGLE = 0xf1;
-    public static final int CHOSE_MODE_MULTIPLE = 0xff;
     public int max_chose_count = 9;
+    private int spancount=3;
     public boolean isNeedfcamera = false;
     View rootview;
     RecyclerView my_recycler_view;
@@ -106,7 +104,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                 if (floder.getName().equals("/所有图片")) {
                     currentimageses.clear();
                     currentimageses.addAll(imageses);
-                    adapter = new PhotoAdapter(getActivity(), currentimageses, chose_mode);
+                    adapter = new PhotoAdapter(getActivity(), currentimageses,spancount, chose_mode);
                     adapter.setmax_chose_count(max_chose_count);
                     adapter.setDir("");
                     adapter.setNeedCamera(isNeedfcamera);
@@ -131,7 +129,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                     /**
                      * 可以看到文件夹的路径和图片的路径分开保存，极大的减少了内存的消耗；
                      */
-                    adapter = new PhotoAdapter(getActivity(), currentimageses, chose_mode);
+                    adapter = new PhotoAdapter(getActivity(), currentimageses,spancount, chose_mode);
                     adapter.setmax_chose_count(max_chose_count);
                     adapter.setDir(floder.getDir());
                     adapter.setNeedCamera(false);
@@ -190,14 +188,14 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
             open_gallery.setEnabled(false);
         }
         if (adapter == null) {
-            adapter = new PhotoAdapter(getActivity(), currentimageses, chose_mode);
+            adapter = new PhotoAdapter(getActivity(), currentimageses, spancount,chose_mode);
             adapter.setDir("");
             adapter.setNeedCamera(isNeedfcamera);
             adapter.setmax_chose_count(max_chose_count);
         }
         //如果可以确定每个item的高度是固定的，设置这个选项可以提高性能
         my_recycler_view.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spancount);
         my_recycler_view.setLayoutManager(layoutManager);
         my_recycler_view.setAdapter(adapter);
         open_gallery.setText("所有图片");
@@ -230,10 +228,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         });
     }
 
-
-    public void log(String msg) {
-        Log.i("gallery", msg);
-    }
 
     public void notifyDataSetChanged() {
         if (adapter != null) {
@@ -268,9 +262,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                 if (cursor != null) {
                     cursor.close();
                 }
-                if(isNeedfcamera){
-                    imageses.add(0, "");
-                }
                 currentimageses.clear();
                 currentimageses.addAll(imageses);
                 handler.sendEmptyMessage(0);
@@ -286,7 +277,6 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 String firstImage = null;
 
                 Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
@@ -357,13 +347,17 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         }).start();
     }
 
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         Bundle bundle=getArguments();
         if (bundle == null)return;
-        chose_mode = bundle.getInt("chose_mode");
-        max_chose_count = bundle.getInt("max_chose_count");
-        isNeedfcamera= (boolean) bundle.get("isNeedfcamera");
+        chose_mode = bundle.getInt(PickConfig.EXTRA_PICK_MODE);
+        max_chose_count = bundle.getInt(PickConfig.EXTRA_MAX_SIZE);
+        spancount =bundle.getInt(PickConfig.EXTRA_SPAN_COUNT);
+        isNeedfcamera= bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CAMERA);
     }
+
+
 }

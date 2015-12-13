@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 
+import com.wq.photo.widget.PickConfig;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
@@ -38,13 +40,11 @@ import java.util.Set;
  */
 public class MediaChoseActivity extends ActionBarActivity {
 
-    public static final int CHOSE_MODE_SINGLE = 0;
-    public static final int CHOSE_MODE_MULTIPLE = 1;
     public int max_chose_count = 1;
     public LinkedHashMap imasgemap = new LinkedHashMap();
     public LinkedHashSet imagesChose = new LinkedHashSet();
     PhotoGalleryFragment photoGalleryFragment;
-    int chosemode = CHOSE_MODE_MULTIPLE;
+    int chosemode = PickConfig.MODE_SINGLE_PICK;
 
     boolean isneedCrop = false;
     boolean isNeedActionbar = false;
@@ -52,31 +52,29 @@ public class MediaChoseActivity extends ActionBarActivity {
 
     int crop_image_w, crop_image_h;
 
+
+
+    int colorPrimary;
+    int spanCount;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_chose);
         FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
-        chosemode = getIntent().getIntExtra("chose_mode", CHOSE_MODE_MULTIPLE);
-        if (chosemode == CHOSE_MODE_MULTIPLE) {
-            max_chose_count = getIntent().getIntExtra("max_chose_count", 9);
-        }
-        isNeedActionbar = getIntent().getBooleanExtra("isneedactionbar", true);
-        isNeedfcamera = getIntent().getBooleanExtra("isNeedfcamera", true);
-        //是否需要剪裁
-        isneedCrop = getIntent().getBooleanExtra("crop", false);
-        if (isneedCrop) {
-            chosemode = CHOSE_MODE_SINGLE;
-            max_chose_count = 1;
-            crop_image_w = getIntent().getIntExtra("crop_image_w", 720);
-            crop_image_h = getIntent().getIntExtra("crop_image_h", 720);
+        Bundle bundle=getIntent().getBundleExtra(PickConfig.EXTRA_PICK_BUNDLE);
+        spanCount = bundle.getInt(PickConfig.EXTRA_SPAN_COUNT,PickConfig.DEFAULT_SPANCOUNT);
+        chosemode  = bundle.getInt(PickConfig.EXTRA_PICK_MODE,PickConfig.MODE_SINGLE_PICK);
+        max_chose_count  = bundle.getInt(PickConfig.EXTRA_MAX_SIZE,PickConfig.DEFAULT_PICKSIZE);
+        isNeedActionbar=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_ACTIONBAR,true);
+        isneedCrop=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CROP,false);
+        isNeedfcamera=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CAMERA,true);
+        if (chosemode== PickConfig.MODE_MULTIP_PICK){
+            isneedCrop=false;
         }
         photoGalleryFragment = PhotoGalleryFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("isNeedfcamera", isNeedfcamera);
-        bundle.putInt("chose_mode", chosemode);
-        bundle.putInt("max_chose_count", max_chose_count);
         photoGalleryFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, photoGalleryFragment, PhotoGalleryFragment.class.getSimpleName());
         fragmentTransaction.commit();
@@ -132,7 +130,7 @@ public class MediaChoseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.photo_gallery_menu, menu);
-        if (isPriview && (chosemode == CHOSE_MODE_MULTIPLE)) {
+        if (isPriview && (chosemode == PickConfig.MODE_MULTIP_PICK)) {
             menu.findItem(R.id.menu_photo_delete).setVisible(true);
         } else {
             menu.findItem(R.id.menu_photo_delete).setVisible(false);
@@ -143,7 +141,7 @@ public class MediaChoseActivity extends ActionBarActivity {
         } else {
             menu.findItem(R.id.menu_photo_count).setEnabled(true);
             menu.findItem(R.id.menu_photo_count).setVisible(true);
-            if (chosemode == CHOSE_MODE_MULTIPLE) {
+            if (chosemode == PickConfig.MODE_MULTIP_PICK) {
                 menu.findItem(R.id.menu_photo_count).setTitle("发送(" + imasgemap.size() + "/" + max_chose_count + ")");
             } else {
                 menu.findItem(R.id.menu_photo_count).setTitle("发送(1)");
@@ -199,7 +197,7 @@ public class MediaChoseActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         isPriview = false;
         invalidateOptionsMenu();
-        if (photoGalleryFragment != null && chosemode == CHOSE_MODE_MULTIPLE) {
+        if (photoGalleryFragment != null && chosemode == PickConfig.MODE_MULTIP_PICK) {
             photoGalleryFragment.notifyDataSetChanged();
         }
     }
@@ -231,7 +229,7 @@ public class MediaChoseActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CROP && (chosemode == CHOSE_MODE_SINGLE)) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CROP && (chosemode == PickConfig.MODE_SINGLE_PICK)) {
             Intent intent = new Intent();
             ArrayList<String> img = new ArrayList<>();
             String crop_path = data.getStringExtra("crop_path");
@@ -244,7 +242,7 @@ public class MediaChoseActivity extends ActionBarActivity {
             } else {
                 Toast.makeText(this, "截取图片失败", Toast.LENGTH_SHORT).show();
             }
-        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_SINGLE)) {
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == PickConfig.MODE_SINGLE_PICK)) {
             if (currentfile != null && currentfile.exists() && currentfile.length() > 10) {
                 if (isneedCrop && !isCropOver) {
                     sendStarCrop(currentfile.getAbsolutePath());
@@ -260,7 +258,7 @@ public class MediaChoseActivity extends ActionBarActivity {
             } else {
                 Toast.makeText(MediaChoseActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
             }
-        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == CHOSE_MODE_MULTIPLE)) {
+        } else if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CAMERA && (chosemode == PickConfig.MODE_MULTIP_PICK)) {
 
             if (currentfile != null && currentfile.exists() && currentfile.length() > 10) {
                 getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());

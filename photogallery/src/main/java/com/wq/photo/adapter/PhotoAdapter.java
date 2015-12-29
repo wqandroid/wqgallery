@@ -105,7 +105,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_IMAGE) {
             final ImageViewHolder ivholder = (ImageViewHolder) holder;
-            final String images = getDir() + imageses.get(position);
+            int actualPosition;
+            if(isNeedCamera){
+                actualPosition = position - 1;
+            } else {
+                actualPosition = position;
+            }
+            final String images = getDir() + imageses.get(actualPosition);
             displayImage(images, ivholder.iv_image);
             if (currentChoseMode == PickConfig.MODE_MULTIP_PICK) {
                 ivholder.checkBox.setVisibility(View.VISIBLE);

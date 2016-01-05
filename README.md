@@ -18,7 +18,7 @@
 #####第一步 在项目的 build.gradle 添加dependencies
     
     dependencies {
-       compile 'wq.photo:photogallery:2.1.0'
+       compile 'wq.photo:photogallery:2.2.0'
     }
 #####第二步 调用相册选择器
 
@@ -46,12 +46,12 @@
 
 
 
-###Version 2.0.0
+###Version 2.2.0
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
      2.1.0 修改了配置选择的代码 支持自定义一行显示几张
-
+     2.2.0 修改没有数据的异常
 
 ###Thanks
   * [Glide](https://github.com/bumptech/glide) A powerful image downloading and caching library for Android

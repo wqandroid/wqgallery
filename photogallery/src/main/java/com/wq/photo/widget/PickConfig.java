@@ -28,12 +28,12 @@ public class PickConfig {
     public final static String EXTRA_IS_NEED_CROP = "extra_isneed_crop";
 
 
-    private final int spanCount;
-    private final int pickMode;
-    private final int maxPickSize;
-    private final boolean isneedcrop;
-    private final boolean isneedactionbar;
-    private final boolean isneedcamera;
+    private  int spanCount;
+    private  int pickMode;
+    private  int maxPickSize;
+    private  boolean isneedcrop;
+    private   boolean isneedactionbar;
+    private  boolean isneedcamera;
 
     private PickConfig(Activity context, PickConfig.Builder builder){
         this.spanCount = builder.spanCount;
@@ -42,6 +42,12 @@ public class PickConfig {
         this.isneedcrop=builder.isneed_crop;
         this.isneedcamera=builder.isneed_camera;
         this.isneedactionbar=builder.isneed_actionbar;
+        if (this.pickMode == MODE_MULTIP_PICK){
+            this.isneedactionbar=true;
+            this.isneedcrop=false;
+        }else {
+            this.maxPickSize=1;
+        }
         Bundle bundle = new Bundle();
         bundle.putInt(EXTRA_SPAN_COUNT,this.spanCount);
         bundle.putInt(EXTRA_PICK_MODE,this.pickMode);

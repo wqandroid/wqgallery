@@ -6,46 +6,100 @@
 
     <LinearLayout
         android:id="@+id/ll"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/button1"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="22dp"
+        android:layout_marginRight="22dp"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="单选模式" />
-        <Button
-            android:id="@+id/button2"
+            android:checked="true"
+            android:id="@+id/cb_is_single_mode"
+            android:minHeight="38dp"
+            android:text="是否单选" />
+
+        <android.support.v7.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="多选模式" />
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="单选剪裁" />
+            android:checked="true"
+            android:minHeight="38dp"
+            android:id="@+id/cb_is_need_camera"
+            android:text="是否需要相机" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="一行显示几张照片" />
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/ed_span_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="2" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_max_chose_layout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="做多选择几张照片" />
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/ed_maxchose_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="1" />
         </LinearLayout>
 
+        <android.support.v7.widget.AppCompatCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:minHeight="38dp"
+            android:id="@+id/cb_is_need_crop"
+            android:text="是否需要剪裁" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:minHeight="38dp"
+            android:id="@+id/cb_is_need_actionbar"
+            android:text="是否需要ActionBar" />
+
+        <Button
+            android:id="@+id/bt_start_chose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="选取图片" />
+    </LinearLayout>
 
 
     <ListView
         android:id="@+id/listview"
-        android:layout_above="@+id/ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
-    <!--<HorizontalScrollView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_above="@+id/ll">-->
-        <!--<LinearLayout-->
-            <!--android:id="@+id/llcontent"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="horizontal" />-->
-    <!--</HorizontalScrollView>-->
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll">
+    </ListView>
 
 </RelativeLayout>

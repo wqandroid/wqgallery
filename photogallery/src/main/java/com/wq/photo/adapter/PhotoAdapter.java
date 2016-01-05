@@ -27,7 +27,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     public int max_chose_count = 9;
-
     LayoutInflater inflater;
     List<String> imageses;
     Context context;
@@ -36,16 +35,18 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public int currentChoseMode;
     int sWidthPix;
     int spancount;
-    public PhotoAdapter(Context context, List<String> imageses, int spancount,int chosemode) {
+
+    public PhotoAdapter(Context context, List<String> imageses, int spancount, int chosemode) {
         inflater = LayoutInflater.from(context);
         this.context = context;
-        this.spancount=spancount;
+        this.spancount = spancount;
         this.imageses = imageses;
         sWidthPix = context.getResources().getDisplayMetrics().widthPixels;
         params = new RecyclerView.LayoutParams(sWidthPix / spancount, sWidthPix / spancount);
         currentChoseMode = chosemode;
         hashmap = ((MediaChoseActivity) context).getImageChoseMap();
     }
+
     public LinkedHashMap getCHoseImages() {
         return hashmap;
     }
@@ -53,7 +54,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void setmax_chose_count(int max_chose_count) {
         this.max_chose_count = max_chose_count;
     }
+
     String imgdir;
+
     public void setDir(String dir) {
         imgdir = dir;
     }
@@ -105,7 +108,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (getItemViewType(position) == TYPE_IMAGE) {
             final ImageViewHolder ivholder = (ImageViewHolder) holder;
-            final String images = getDir() + imageses.get(position);
+            final String images = getDir() + getItem(position);
             displayImage(images, ivholder.iv_image);
             if (currentChoseMode == PickConfig.MODE_MULTIP_PICK) {
                 ivholder.checkBox.setVisibility(View.VISIBLE);
@@ -155,22 +158,22 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 });
             }
-        }else{
-            CameraViewHolder holder1= (CameraViewHolder) holder;
+        } else {
+            CameraViewHolder holder1 = (CameraViewHolder) holder;
             holder1.camera_lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(currentChoseMode==PickConfig.MODE_MULTIP_PICK){
-                        if(getCHoseImages().size()<max_chose_count){
-                            ((MediaChoseActivity)context).sendStarCamera();
-                        }else{
+                    if (currentChoseMode == PickConfig.MODE_MULTIP_PICK) {
+                        if (getCHoseImages().size() < max_chose_count) {
+                            ((MediaChoseActivity) context).sendStarCamera();
+                        } else {
                             Toast.makeText(context, "你最多只能选择" + max_chose_count + "张照片", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
-                        if(getCHoseImages().size()>0){
+                    } else {
+                        if (getCHoseImages().size() > 0) {
                             getCHoseImages().clear();
                         }
-                        ((MediaChoseActivity)context).sendStarCamera();
+                        ((MediaChoseActivity) context).sendStarCamera();
                     }
                 }
             });
@@ -192,7 +195,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Glide.with(context).load(url).
                 centerCrop()
                 .crossFade()
-                .override(sWidthPix/spancount,sWidthPix/spancount)
+                .override(sWidthPix / spancount, sWidthPix / spancount)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .placeholder(R.drawable.loadfaild)
                 .into(view);
@@ -208,10 +211,17 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         return TYPE_IMAGE;
     }
+
+    public String getItem(int postion) {
+        if (postion >= imageses.size()) return "";
+        return imageses.get(postion);
+    }
+
+
     @Override
     public int getItemCount() {
-        if (isNeedCamera){
-            return imageses.size()+1;
+        if (isNeedCamera) {
+            return imageses.size() + 1;
         }
         return imageses.size();
     }
@@ -232,10 +242,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static class CameraViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout camera_lin;
+
         public CameraViewHolder(View itemView) {
             super(itemView);
             itemView.setLayoutParams(params);
-            camera_lin= (LinearLayout) itemView.findViewById(R.id.camera_lin);
+            camera_lin = (LinearLayout) itemView.findViewById(R.id.camera_lin);
         }
     }
 

@@ -14,19 +14,19 @@
 
 
         <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_is_single_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:id="@+id/cb_is_single_mode"
             android:minHeight="38dp"
             android:text="是否单选" />
 
         <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_is_need_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:minHeight="38dp"
-            android:id="@+id/cb_is_need_camera"
             android:text="是否需要相机" />
 
         <LinearLayout
@@ -41,21 +41,23 @@
                 android:text="一行显示几张照片" />
 
             <EditText
-                android:inputType="number"
                 android:id="@+id/ed_span_count"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:text="2" />
 
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/ll_max_chose_layout"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -63,29 +65,59 @@
                 android:text="做多选择几张照片" />
 
             <EditText
-                android:inputType="number"
                 android:id="@+id/ed_maxchose_count"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:text="1" />
         </LinearLayout>
 
         <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cb_is_need_crop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:minHeight="38dp"
-            android:id="@+id/cb_is_need_crop"
             android:text="是否需要剪裁" />
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:minHeight="38dp"
-            android:id="@+id/cb_is_need_actionbar"
-            android:text="是否需要ActionBar" />
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:id="@+id/ll_cropinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/cb_is_square"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:minHeight="38dp"
+                    android:text="是否正方形剪裁" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="图片压缩比"
+                android:textSize="11sp" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seekbar"
+                android:progress="80"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/bt_start_chose"
@@ -99,7 +131,6 @@
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/ll">
-    </ListView>
+        android:layout_below="@+id/ll"></ListView>
 
 </RelativeLayout>

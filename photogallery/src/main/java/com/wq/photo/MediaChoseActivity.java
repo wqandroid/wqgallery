@@ -2,6 +2,9 @@ package com.wq.photo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -12,14 +15,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
+import com.wq.photo.util.StatusBarCompat;
 import com.wq.photo.widget.PickConfig;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,40 +54,48 @@ public class MediaChoseActivity extends ActionBarActivity {
     int chosemode = PickConfig.MODE_SINGLE_PICK;
 
     boolean isneedCrop = false;
-    boolean isNeedActionbar = false;
     boolean isNeedfcamera = false;
-
-    int crop_image_w, crop_image_h;
-
-
-
-    int colorPrimary;
     int spanCount;
-
+    private  int actionBarcolor;
+    private  int statusBarcolor;
+    private boolean isSquareCrop;
+    private UCrop.Options options=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_chose);
+        Toolbar toobar= (Toolbar) findViewById(R.id.toobar);
+        setSupportActionBar(toobar);
+
         FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         Bundle bundle=getIntent().getBundleExtra(PickConfig.EXTRA_PICK_BUNDLE);
+        statusBarcolor=bundle.getInt(PickConfig.EXTRA_STATUS_BAR_COLOR);
+        actionBarcolor=bundle.getInt(PickConfig.EXTRA_ACTION_BAR_COLOR);
         spanCount = bundle.getInt(PickConfig.EXTRA_SPAN_COUNT,PickConfig.DEFAULT_SPANCOUNT);
         chosemode  = bundle.getInt(PickConfig.EXTRA_PICK_MODE,PickConfig.MODE_SINGLE_PICK);
         max_chose_count  = bundle.getInt(PickConfig.EXTRA_MAX_SIZE,PickConfig.DEFAULT_PICKSIZE);
-        isNeedActionbar=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_ACTIONBAR,true);
         isneedCrop=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CROP,false);
         isNeedfcamera=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CAMERA,true);
+        options=bundle.getParcelable(PickConfig.EXTRA_UCROP_OPTIONS);
+        isSquareCrop=bundle.getBoolean(PickConfig.EXTRA_IS_SQUARE_CROP);
         if (chosemode== PickConfig.MODE_MULTIP_PICK){
             isneedCrop=false;
         }
+
+        StatusBarCompat.compat(this,statusBarcolor);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(actionBarcolor));
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         photoGalleryFragment = PhotoGalleryFragment.newInstance();
         photoGalleryFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, photoGalleryFragment, PhotoGalleryFragment.class.getSimpleName());
         fragmentTransaction.commit();
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+
     }
 
     boolean isPriview = false;
@@ -118,9 +133,6 @@ public class MediaChoseActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!isNeedActionbar) {
-            getSupportActionBar().hide();
-        }
     }
 
     public LinkedHashMap getImageChoseMap() {
@@ -229,10 +241,11 @@ public class MediaChoseActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_CROP && (chosemode == PickConfig.MODE_SINGLE_PICK)) {
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
             Intent intent = new Intent();
             ArrayList<String> img = new ArrayList<>();
-            String crop_path = data.getStringExtra("crop_path");
+            String crop_path = resultUri.getPath();
             isCropOver = true;
             if (crop_path != null && new File(crop_path) != null) {
                 img.add(crop_path);
@@ -307,12 +320,20 @@ public class MediaChoseActivity extends ActionBarActivity {
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
     public void sendStarCrop(String path) {
-        Intent intent = new Intent(this, CropImageActivity.class);
-        intent.setData(Uri.fromFile(new File(path)));
-        intent.putExtra("crop_image_w", crop_image_w);
-        intent.putExtra("crop_image_h", crop_image_h);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, getCropFile().getAbsolutePath());
-        startActivityForResult(intent, REQUEST_CODE_CROP);
+        UCrop uCrop = UCrop.of(Uri.fromFile(new File(path)), Uri.fromFile(new File(getCropFile().getAbsolutePath())));
+        if (isSquareCrop){
+            uCrop = uCrop.withAspectRatio(1, 1);
+        }else {
+            uCrop = uCrop.useSourceImageAspectRatio();
+        }
+        if (options == null){
+            options=new UCrop.Options();
+        }
+        options.setStatusBarColor(statusBarcolor);
+        options.setToolbarColor(actionBarcolor);
+        uCrop.withOptions(options);
+        uCrop.start(this);
+
     }
     public File getTempFile() {
         String str = null;

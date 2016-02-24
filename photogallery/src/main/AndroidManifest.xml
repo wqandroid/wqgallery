@@ -9,6 +9,7 @@
         android:allowBackup="true"
         android:label="@string/app_name" >
         <activity
+            android:theme="@style/AppTheme"
             android:name=".MediaChoseActivity"
             android:label="@string/title_activity_media_chose" >
         </activity>
@@ -16,6 +17,9 @@
             android:name=".CropImageActivity"
             android:label="@string/title_activity_crop_image" >
         </activity>
+        <activity android:name="com.yalantis.ucrop.UCropActivity"
+            android:theme="@style/AppTheme"
+            ></activity>
     </application>
 
 </manifest>

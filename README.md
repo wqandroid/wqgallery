@@ -3,14 +3,11 @@
 
 ####下面是效果图
 
-![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert1.gif)
-
-![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/Screenshot_2015-03-31-18-35.png)
+![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert.gif)
 
 
 
-
-[ ![Download](https://api.bintray.com/packages/wqandroid/maven/Photogallery/images/download.svg) ](https://bintray.com/wqandroid/maven/Photogallery/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/wqandroid/maven/Photogallery/images/download.svg) ](https://jitpack.io/#wqandroid/wqgallery/3.0.0)
 
 ##怎么使用?
 
@@ -37,7 +34,6 @@
                 .statusBarcolor(Color.parseColor("#D81B60")) //设置状态栏的颜色(5.0以上)
                 .isneedcrop(false)//受否需要剪裁
                 .setUropOptions(options) //设置剪裁参数
-                .isneedactionbar(false)//是否需要actionbar 多选默认不能隐藏
                 .isSqureCrop(true) //是否是正方形格式剪裁
                 .pickMode(PickConfig.MODE_MULTIP_PICK)//单选还是多选
                 .build();

@@ -5,18 +5,25 @@
 
 ![Image text](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/wqgallert.gif)
 
+[![IMAGE ALT TEXT HERE](https://coding.net/u/wangqiong/p/wqgallery/git/raw/master/app/screenshort/Screenshot_2016.jpg)](https://youtu.be/uZE2kVCwJxg)
 
-
-[ ![Download](https://api.bintray.com/packages/wqandroid/maven/Photogallery/images/download.svg) ](https://jitpack.io/#wqandroid/wqgallery/3.0.0)
+[![](https://jitpack.io/v/wqandroid/wqgallery.svg)](https://jitpack.io/#wqandroid/wqgallery)
 
 ##怎么使用?
 
 ====
 #####第一步 在项目的 build.gradle 添加dependencies
-    
+    allprojects {
+    		repositories {
+    			...
+    			maven { url "https://jitpack.io" }
+    		}
+    	}
+
     dependencies {
-       compile 'wq.photo:photogallery:2.2.0'
-    }
+   	        compile 'com.github.wqandroid:wqgallery:3.0.0'
+   	}
+
 #####第二步 调用相册选择器
 
      //图片剪裁的一些设置

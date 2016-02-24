@@ -5,7 +5,7 @@
 
 ![Image text](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/wqgallert.gif)
 
-[![IMAGE ALT TEXT HERE](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/Screenshot_20161.jpg)](https://youtu.be/uZE2kVCwJxg)
+[![IMAGE ALT TEXT HERE](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/Screenshot_20161.png)](https://youtu.be/uZE2kVCwJxg)
 
 [![](https://jitpack.io/v/wqandroid/wqgallery.svg)](https://jitpack.io/#wqandroid/wqgallery)
 

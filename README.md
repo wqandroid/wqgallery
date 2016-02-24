@@ -22,12 +22,23 @@
     }
 #####第二步 调用相册选择器
 
+     //图片剪裁的一些设置
+     UCrop.Options options = new UCrop.Options();
+     //图片生成格式
+     options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+     //图片压缩比
+     options.setCompressionQuality(seekBar.getProgress());
+
      new  PickConfig.Builder(MainActivity.this)
                 .maxPickSize(9)//最多选择几张
                 .isneedcamera(true)//是否需要第一项是相机
                 .spanCount(4)//一行显示几张照片
+                .actionBarcolor(Color.parseColor("#E91E63"))//设置toolbar的颜色
+                .statusBarcolor(Color.parseColor("#D81B60")) //设置状态栏的颜色(5.0以上)
                 .isneedcrop(false)//受否需要剪裁
+                .setUropOptions(options) //设置剪裁参数
                 .isneedactionbar(false)//是否需要actionbar 多选默认不能隐藏
+                .isSqureCrop(true) //是否是正方形格式剪裁
                 .pickMode(PickConfig.MODE_MULTIP_PICK)//单选还是多选
                 .build();
 
@@ -39,22 +50,23 @@
      if(resultCode==RESULT_OK && requestCode == PickConfig.PICK_REQUEST_CODE){
             //在data中返回 选择的图片列表
             ArrayList<String>paths=data.getStringArrayListExtra("data");
-            
-        }
+     }
 
 
 
 
 
-###Version 2.2.0
+###Version 3.0.0
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
      2.1.0 修改了配置选择的代码 支持自定义一行显示几张
      2.2.0 修改没有数据的异常
+     3.0.0 修改Actionbar问题,支持Crop
 
 ###Thanks
   * [Glide](https://github.com/bumptech/glide) A powerful image downloading and caching library for Android
+  * [uCrop ](https://github.com/Yalantis/uCrop) 感谢uCrop 作者,当前库的剪裁采用uCrop
 
 ##Developed By
 #####wqandroid@gmail.com

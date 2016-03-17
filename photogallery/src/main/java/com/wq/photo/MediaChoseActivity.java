@@ -56,35 +56,35 @@ public class MediaChoseActivity extends ActionBarActivity {
     boolean isneedCrop = false;
     boolean isNeedfcamera = false;
     int spanCount;
-    private  int actionBarcolor;
-    private  int statusBarcolor;
+    private int actionBarcolor;
+    private int statusBarcolor;
     private boolean isSquareCrop;
-    private UCrop.Options options=null;
+    private UCrop.Options options = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_chose);
-        Toolbar toobar= (Toolbar) findViewById(R.id.toobar);
+        Toolbar toobar = (Toolbar) findViewById(R.id.toobar);
         setSupportActionBar(toobar);
 
         FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
-        Bundle bundle=getIntent().getBundleExtra(PickConfig.EXTRA_PICK_BUNDLE);
-        statusBarcolor=bundle.getInt(PickConfig.EXTRA_STATUS_BAR_COLOR);
-        actionBarcolor=bundle.getInt(PickConfig.EXTRA_ACTION_BAR_COLOR);
-        spanCount = bundle.getInt(PickConfig.EXTRA_SPAN_COUNT,PickConfig.DEFAULT_SPANCOUNT);
-        chosemode  = bundle.getInt(PickConfig.EXTRA_PICK_MODE,PickConfig.MODE_SINGLE_PICK);
-        max_chose_count  = bundle.getInt(PickConfig.EXTRA_MAX_SIZE,PickConfig.DEFAULT_PICKSIZE);
-        isneedCrop=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CROP,false);
-        isNeedfcamera=bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CAMERA,true);
-        options=bundle.getParcelable(PickConfig.EXTRA_UCROP_OPTIONS);
-        isSquareCrop=bundle.getBoolean(PickConfig.EXTRA_IS_SQUARE_CROP);
-        if (chosemode== PickConfig.MODE_MULTIP_PICK){
-            isneedCrop=false;
+        Bundle bundle = getIntent().getBundleExtra(PickConfig.EXTRA_PICK_BUNDLE);
+        statusBarcolor = bundle.getInt(PickConfig.EXTRA_STATUS_BAR_COLOR);
+        actionBarcolor = bundle.getInt(PickConfig.EXTRA_ACTION_BAR_COLOR);
+        spanCount = bundle.getInt(PickConfig.EXTRA_SPAN_COUNT, PickConfig.DEFAULT_SPANCOUNT);
+        chosemode = bundle.getInt(PickConfig.EXTRA_PICK_MODE, PickConfig.MODE_SINGLE_PICK);
+        max_chose_count = bundle.getInt(PickConfig.EXTRA_MAX_SIZE, PickConfig.DEFAULT_PICKSIZE);
+        isneedCrop = bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CROP, false);
+        isNeedfcamera = bundle.getBoolean(PickConfig.EXTRA_IS_NEED_CAMERA, true);
+        options = bundle.getParcelable(PickConfig.EXTRA_UCROP_OPTIONS);
+        isSquareCrop = bundle.getBoolean(PickConfig.EXTRA_IS_SQUARE_CROP);
+        if (chosemode == PickConfig.MODE_MULTIP_PICK) {
+            isneedCrop = false;
         }
 
-        StatusBarCompat.compat(this,statusBarcolor);
+        StatusBarCompat.compat(this, statusBarcolor);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(actionBarcolor));
 
         if (getSupportActionBar() != null) {
@@ -95,10 +95,33 @@ public class MediaChoseActivity extends ActionBarActivity {
         photoGalleryFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, photoGalleryFragment, PhotoGalleryFragment.class.getSimpleName());
         fragmentTransaction.commit();
+        if (savedInstanceState != null) {
+            int chosemode=savedInstanceState.getInt("chosemode");
+            if (chosemode == PickConfig.MODE_SINGLE_PICK){
+                currentfile = new File(savedInstanceState.getString("ImageFilePath"));
+                boolean isneedCrop=savedInstanceState.getBoolean("isneedCrop");
+                if (isneedCrop && !isCropOver) {
+                    sendStarCrop(currentfile.getAbsolutePath());
+                } else {
+                    Intent intent = new Intent();
+                    ArrayList<String> img = new ArrayList<>();
+                    img.add(currentfile.getAbsolutePath());
+                    intent.putExtra("data", img);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                insertImage(currentfile.getAbsolutePath());
+            }else {
+                getImageChoseMap().put(currentfile.getAbsolutePath(), currentfile.getAbsolutePath());
+                invalidateOptionsMenu();
+                insertImage(currentfile.getAbsolutePath());
+            }
+        }
 
     }
 
     boolean isPriview = false;
+
     public void starPriview(LinkedHashMap map, String currentimage) {
         if (isneedCrop && !isCropOver) {
             sendStarCrop(currentimage);
@@ -319,15 +342,16 @@ public class MediaChoseActivity extends ActionBarActivity {
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
     }
+
     public void sendStarCrop(String path) {
         UCrop uCrop = UCrop.of(Uri.fromFile(new File(path)), Uri.fromFile(new File(getCropFile().getAbsolutePath())));
-        if (isSquareCrop){
+        if (isSquareCrop) {
             uCrop = uCrop.withAspectRatio(1, 1);
-        }else {
+        } else {
             uCrop = uCrop.useSourceImageAspectRatio();
         }
-        if (options == null){
-            options=new UCrop.Options();
+        if (options == null) {
+            options = new UCrop.Options();
         }
         options.setStatusBarColor(statusBarcolor);
         options.setToolbarColor(actionBarcolor);
@@ -335,6 +359,7 @@ public class MediaChoseActivity extends ActionBarActivity {
         uCrop.start(this);
 
     }
+
     public File getTempFile() {
         String str = null;
         Date date = null;
@@ -343,25 +368,43 @@ public class MediaChoseActivity extends ActionBarActivity {
         str = format.format(date);
         return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "IMG_" + str + ".jpg");
     }
+
     public File getCropFile() {
         return new File(getTmpPhotos());
     }
+
     /**
      * 获取tmp path
+     *
      * @return
      */
-    public  String getTmpPhotos() {
+    public String getTmpPhotos() {
         return new File(getCacheFile(), ".tmpcamara" + System.currentTimeMillis() + ".jpg").getAbsolutePath();
     }
+
     /**
      * 临时缓存目录
+     *
      * @return
      */
     public String getCacheFile() {
-        return  getDir("post_temp", Context.MODE_PRIVATE).getAbsolutePath();
+        return getDir("post_temp", Context.MODE_PRIVATE).getAbsolutePath();
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (currentfile != null && currentfile.exists()) {
+            outState.putString("ImageFilePath", currentfile.getAbsolutePath());
+            outState.putInt("chosemode",chosemode);
+            outState.putBoolean("isneedCrop",isneedCrop);
+        }
+    }
 
 
 }

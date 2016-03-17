@@ -5,7 +5,7 @@
 
 ![Image text](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/wqgallert.gif)
 
-[![IMAGE ALT TEXT HERE](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/Screenshot_20161.png)](https://youtu.be/uZE2kVCwJxg)
+[![视频连接](https://github.com/wqandroid/wqgallery/raw/dev/app/screenshort/Screenshot_20161.png)](https://youtu.be/uZE2kVCwJxg)
 
 [![](https://jitpack.io/v/wqandroid/wqgallery.svg)](https://jitpack.io/#wqandroid/wqgallery)
 
@@ -59,13 +59,14 @@
 
 
 
-###Version 3.0.0
+###Version 3.0.1
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
      2.1.0 修改了配置选择的代码 支持自定义一行显示几张
      2.2.0 修改没有数据的异常
      3.0.0 修改Actionbar问题,支持Crop
+     3.0.1 修复在三星手机拍照旋转导致获取图片失败的bug
 
 ###Thanks
   * [Glide](https://github.com/bumptech/glide) A powerful image downloading and caching library for Android

@@ -160,9 +160,11 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
         handler.post(new Runnable() {
             @Override
             public void run() {
-                currentimageses.add(1, path);
-                imageses.add(1, path);
-                adapter.notifyDataSetChanged();
+                if (new File(path)!=null && new File(path).exists() && new File(path).length() >10){
+                    currentimageses.add(0, path);
+                    imageses.add(0, path);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
 

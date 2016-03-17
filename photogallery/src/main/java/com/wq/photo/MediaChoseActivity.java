@@ -283,6 +283,7 @@ public class MediaChoseActivity extends ActionBarActivity {
                 if (isneedCrop && !isCropOver) {
                     sendStarCrop(currentfile.getAbsolutePath());
                 } else {
+                    insertImage(currentfile.getAbsolutePath());
                     Intent intent = new Intent();
                     ArrayList<String> img = new ArrayList<>();
                     img.add(currentfile.getAbsolutePath());
@@ -290,7 +291,6 @@ public class MediaChoseActivity extends ActionBarActivity {
                     setResult(RESULT_OK, intent);
                     finish();
                 }
-                insertImage(currentfile.getAbsolutePath());
             } else {
                 Toast.makeText(MediaChoseActivity.this, "获取图片失败", Toast.LENGTH_SHORT).show();
             }

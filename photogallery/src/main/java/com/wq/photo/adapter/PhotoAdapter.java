@@ -154,7 +154,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         getCHoseImages().clear();
                         getCHoseImages().put(images, images);
                         ((MediaChoseActivity) context).sendImages();
-//                        ((MediaChoseActivity) context).starPriview(getCHoseImages(), images);
                     }
                 });
             }
@@ -213,10 +212,13 @@ public class PhotoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public String getItem(int postion) {
-        if (postion >= imageses.size()) return "";
-        return imageses.get(postion);
+        int realPos = postion;
+        if (isNeedCamera){
+            realPos = postion -1;
+        }
+        if (realPos >= imageses.size()) return "";
+        return imageses.get(realPos);
     }
-
 
     @Override
     public int getItemCount() {

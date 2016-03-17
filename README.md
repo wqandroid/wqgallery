@@ -13,16 +13,16 @@
 
 ====
 #####第一步 在项目的 build.gradle 添加dependencies
-    allprojects {
-    		repositories {
-    			...
-    			maven { url "https://jitpack.io" }
-    		}
-    	}
+```
+repositories {
+ ...
+ maven { url "https://jitpack.io" }
+}
 
-    dependencies {
-   	        compile 'com.github.wqandroid:wqgallery:3.0.0'
-   	}
+dependencies {
+ compile 'com.github.wqandroid:wqgallery:3.1.0'
+}
+```
 
 #####第二步 调用相册选择器
 

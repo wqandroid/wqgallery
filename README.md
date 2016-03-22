@@ -59,7 +59,7 @@ dependencies {
 
 
 
-###Version 3.1.0
+###Version 3.1.1
      1.0.1 新增单选截图模式
      1.0.2 修改一些bug,以及样式
      2.0.0 修改之前遗留的一些bug,加载图片换成了glide
@@ -67,6 +67,7 @@ dependencies {
      2.2.0 修改没有数据的异常
      3.0.0 修改Actionbar问题,支持Crop
      3.1.0 修复在三星手机拍照旋转导致获取图片失败的bug
+     3.1.1 修复一些异常
 
 ###Thanks
   * [Glide](https://github.com/bumptech/glide) A powerful image downloading and caching library for Android

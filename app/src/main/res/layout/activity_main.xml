@@ -1,8 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:fitsSystemWindows="true"
+        android:background="#03A9F4"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize">
+    </android.support.v7.widget.Toolbar>
+
+
 
     <LinearLayout
         android:id="@+id/ll"
@@ -46,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:inputType="number"
-                android:text="2" />
+                android:text="3" />
 
 
         </LinearLayout>
@@ -133,4 +144,4 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/ll"></ListView>
 
-</RelativeLayout>
+</LinearLayout>

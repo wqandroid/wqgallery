@@ -253,7 +253,7 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                                 MediaStore.Images.Media.MIME_TYPE + "=? or " +
                                 MediaStore.Images.Media.MIME_TYPE + "=?",
                         new String[]{"image/jpeg", "image/png", "image/gif"},
-                        MediaStore.Images.Media.DATE_MODIFIED + " DESC");
+                        MediaStore.Images.Media.DATE_ADDED + " DESC");
                 int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
                 while (cursor.moveToNext()) {
                     String photopath = cursor.getString(dataColumnIndex);
@@ -289,10 +289,10 @@ public class PhotoGalleryFragment extends Fragment implements android.os.Handler
                 Cursor mCursor = mContentResolver.query(mImageUri, null,
                         MediaStore.Images.Media.MIME_TYPE + "=? or " +
                                 MediaStore.Images.Media.MIME_TYPE + "=? or " +
+                                MediaStore.Images.Media.MIME_TYPE + "=? or " +
                                 MediaStore.Images.Media.MIME_TYPE + "=?",
-                        new String[]{"image/jpeg", "image/png","image/gif"},
+                        new String[]{"image/jpeg", "image/png","image/jpg","image/gif"},
                         MediaStore.Images.Media.DATE_MODIFIED);
-
                 Log.e("TAG", mCursor.getCount() + "");
                 while (mCursor.moveToNext()) {
                     // 获取图片的路径

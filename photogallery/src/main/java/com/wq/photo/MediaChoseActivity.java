@@ -384,7 +384,6 @@ public class MediaChoseActivity extends ActionBarActivity {
 
     /**
      * 临时缓存目录
-     *
      * @return
      */
     public String getCacheFile() {
